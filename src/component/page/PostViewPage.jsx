@@ -54,16 +54,15 @@ function PostViewPage(props) {
     const { postId } = useParams();
 
     // 로컬에서 받아온 게시글 데이터
-    const [postData, setPostData] = useState(JSON.parse(localStorage.getItem('posts')));
+    const [postList, setPostList] = useState(JSON.parse(localStorage.getItem('posts')));
     const [post, setPost] = useState(null);
 
     // 마운트/언마운트 시에 실행. 게시글 데이터에서 postId에 해당하는 글 찾기
     useEffect(() => {
-        setPost(postData.find((item) => {
-
+        setPost(postList.find((item) => {
         return item.id ==postId;
         }))
-    }, []);
+    }, [ postList, post ]);
     
     // 댓글 작성 시 사용
     const [comment, setComment] = useState("");
@@ -74,7 +73,7 @@ function PostViewPage(props) {
 
     const deletePost = () => {
 
-        const filteredArray = postData.filter(item => item.id != postId);
+        const filteredArray = postList.filter(item => item.id != postId);
                 
         saveDataToLocalStorage('posts', filteredArray);
 
@@ -82,7 +81,7 @@ function PostViewPage(props) {
     }
 
     const insertComment = () => {
-        const modifiedData = postData.map(item => {
+        const modifiedData = postList.map(item => {
             if (item.id == postId) {
                 console.log(item.comments)
                 const commentsList = item.comments;
@@ -96,16 +95,11 @@ function PostViewPage(props) {
                 return { ...item, comments: commentsList }; // Spread 문법을 사용하여 객체를 복제하고 수정
             }
             return item;
-            });
+        });
 
-            console.log(modifiedData)
-
-            setPost(modifiedData)
+        setPostList(modifiedData)
         saveDataToLocalStorage('posts', modifiedData);
         setComment("");
-
-        console.log(post)
-        console.log(post.comments)
 
     }
 
@@ -134,7 +128,7 @@ function PostViewPage(props) {
                 </PostContainer>
 
                 <CommentLabel>댓글</CommentLabel>
-                <CommentList postId={post && post.id} post={postData} comment={post}/>
+                {post&&post.comments&&<CommentList postId={post && post.id} post={post && post} postList={postList}/>}
 
                 <TextInput
                     height={40}

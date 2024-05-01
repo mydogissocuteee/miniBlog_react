@@ -30,11 +30,11 @@ function MainPage(props) {
 
     const navigate = useNavigate();
 
-    const [postData, setPostData] = useState([]);
+    const [postList, setPostlist] = useState([]);
 
     useEffect(() => {
-        const thisPostData = localStorage.getItem('posts');
-        setPostData(thisPostData ? JSON.parse(thisPostData) : []);
+        const thispostList = localStorage.getItem('posts');
+        setPostlist(thispostList ? JSON.parse(thispostList) : []);
     }, []);
 
     return (
@@ -48,7 +48,7 @@ function MainPage(props) {
                 />
 
                 <PostList
-                    posts={postData}
+                    posts={postList}
                     onClickItem={(item) => {
                         navigate(`/post/${item.id}`)
                     }}

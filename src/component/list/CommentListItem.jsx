@@ -38,11 +38,11 @@ function CommentListItem(props) {
         localStorage.setItem(key, JSON.stringify(data));
     };
 
-    const [postData, setPostData] = useState(JSON.parse(localStorage.getItem('posts')));
+    const [postList, setPostlist] = useState(JSON.parse(localStorage.getItem('posts')));
     const [post, setPost] = useState(null);
     
     useEffect(() => {
-        setPost(postData.find((item) => {
+        setPost(postList.find((item) => {
 
         return item.id ==postId;
         }))
@@ -51,14 +51,9 @@ function CommentListItem(props) {
     console.log(post)
     
     function updateComment () {
-        console.log("수정")
-        console.log(comment)
-        console.log(postData)
-        
         // 글 데이터에서 해당 id 찾기
-        const modifiedData = postData.map(item => {
+        const modifiedData = postList.map(item => {
             if (item.id == postId) {
-                debugger
                 console.log(item)
                 console.log(item.comments)
                 const commentList = item.comments
@@ -76,10 +71,6 @@ function CommentListItem(props) {
                     }
                 });
 
-                console.log(modifiedData2)
-                console.log(item)
-                console.log(item.comments)
-
                 return { ...item, comments: modifiedData2 };
             }
             return item;
@@ -87,11 +78,11 @@ function CommentListItem(props) {
 
             
           saveDataToLocalStorage('posts', modifiedData);
-          setPostData(modifiedData)
+          setPostlist(modifiedData)
     }
     
     function deleteComment () {
-        const modifiedData = postData.map(item => {
+        const modifiedData = postList.map(item => {
             if (item.id == postId) {
                 const commentList = item.comments
                 const newArray = commentList.filter(item => item.id !== comment.id);
@@ -104,7 +95,7 @@ function CommentListItem(props) {
             });
 
           saveDataToLocalStorage('posts', modifiedData);
-          setPostData(modifiedData)
+          setPostlist(modifiedData)
     
     }
 

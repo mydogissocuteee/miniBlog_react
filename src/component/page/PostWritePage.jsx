@@ -36,14 +36,14 @@ function PostWritePage(props) {
     const [newPostId, setNewPostId] = useState("");
     
     // 게시글 데이터
-    const [postData, setPostData] = useState(JSON.parse(localStorage.getItem('posts')));
+    const [postList, setPostlist] = useState(JSON.parse(localStorage.getItem('posts')));
 
     useEffect(() => {
-        const thisPostData = localStorage.getItem('posts');
-        setPostData(thisPostData ? JSON.parse(thisPostData) : []);
+        const thispostList = localStorage.getItem('posts');
+        setPostlist(thispostList ? JSON.parse(thispostList) : []);
         
-        if (thisPostData) {
-            const lastId = postData.reduce((maxId, item) => Math.max(maxId, item.id), 0);
+        if (thispostList) {
+            const lastId = postList.reduce((maxId, item) => Math.max(maxId, item.id), 0);
             setNewPostId(lastId + 1);
         } else {
             setNewPostId(1);
@@ -51,8 +51,8 @@ function PostWritePage(props) {
 
         // postId가 존재하면 setTitle
         if (postId) {
-            const post = postData.find(item => item.id == postId);
-            console.log(postData)
+            const post = postList.find(item => item.id == postId);
+            console.log(postList)
             if (post) {
                 setTitle(post.title);
                 setContent(post.content);
@@ -73,11 +73,11 @@ function PostWritePage(props) {
                 comments: []
             };
     
-            postData.push(post)
+            postList.push(post)
             
-            saveDataToLocalStorage('posts', postData);
+            saveDataToLocalStorage('posts', postList);
         } else {
-            const modifiedData = postData.map(item => {
+            const modifiedData = postList.map(item => {
                 if (item.id == postId) {
                   return { ...item, title: title, content: content }; // Spread 문법을 사용하여 객체를 복제하고 수정
                 }
