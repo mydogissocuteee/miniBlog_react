@@ -31,8 +31,10 @@ const ButtonContainer = styled.div`
 `
 
 function CommentListItem(props) {
-    const { comment } = props;
+    const { comment, deleteComment } = props;
     const { postId } = useParams();
+
+    const commentId = comment.id;
 
     const saveDataToLocalStorage = (key, data) => {
         localStorage.setItem(key, JSON.stringify(data));
@@ -47,25 +49,15 @@ function CommentListItem(props) {
         return item.id ==postId;
         }))
     }, []);
-
-    console.log(post)
     
     function updateComment () {
         // 글 데이터에서 해당 id 찾기
         const modifiedData = postList.map(item => {
             if (item.id == postId) {
-                console.log(item)
-                console.log(item.comments)
                 const commentList = item.comments
-
-
                 const modifiedData2 = commentList.map(item2 => {
-                    debugger
                     if (item2.id == comment.id) {
-                        console.log("댓글====")
-                        console.log(item2)
                         return { ...item2, content: comment.id+"  수정됨" }
-                        // return { ...item, title: title, content: content }; // Spread 문법을 사용하여 객체를 복제하고 수정
                     } else {
                         return item2;
                     }
@@ -76,27 +68,8 @@ function CommentListItem(props) {
             return item;
             });
 
-            
           saveDataToLocalStorage('posts', modifiedData);
           setPostlist(modifiedData)
-    }
-    
-    function deleteComment () {
-        const modifiedData = postList.map(item => {
-            if (item.id == postId) {
-                const commentList = item.comments
-                const newArray = commentList.filter(item => item.id !== comment.id);
-                item.comments = newArray
-
-                return { ...item, comments: newArray };
-                // return { ...item, title: title, content: content }; // Spread 문법을 사용하여 객체를 복제하고 수정
-            }
-            return item;
-            });
-
-          saveDataToLocalStorage('posts', modifiedData);
-          setPostlist(modifiedData)
-    
     }
 
     return (
@@ -109,7 +82,7 @@ function CommentListItem(props) {
             />
             <Button
                 title="삭제"
-                onClick={deleteComment}
+                onClick={()=>deleteComment(commentId)}
             />
             </ButtonContainer>
         </Wrapper>

@@ -102,6 +102,22 @@ function PostViewPage(props) {
         setComment("");
 
     }
+    
+    const deleteComment = (commentId) => {
+        const modifiedData = postList.map(item => {
+            if (item.id == postId) {
+                const commentList = item.comments
+                const newArray = commentList.filter(item => item.id !== commentId);
+                item.comments = newArray
+
+                return { ...item, comments: newArray };
+            }
+            return item;
+        });
+
+        saveDataToLocalStorage('posts', modifiedData);
+        setPostList(modifiedData)
+    }
 
     return (
         <Wrapper>
@@ -128,7 +144,7 @@ function PostViewPage(props) {
                 </PostContainer>
 
                 <CommentLabel>댓글</CommentLabel>
-                {post&&post.comments&&<CommentList postId={post && post.id} post={post && post} postList={postList}/>}
+                {post&&post.comments&&<CommentList postId={post && post.id} post={post && post} postList={postList} deleteComment={deleteComment}/>}
 
                 <TextInput
                     height={40}

@@ -18,13 +18,14 @@ const Wrapper = styled.div`
 
 function CommentList(props) {
     const commentList = props.post.comments;
+    const { deleteComment } = props;
 
     return (
         <Wrapper>
             {commentList && commentList.map((comment, index) => {
                 return <CommentListItem key={comment.id} comment={comment}
-                    //  updateComment={updateComment} 
-                     />;
+                    //  updateComment={updateComment}
+                    deleteComment={deleteComment}/>;
             })}
         </Wrapper>
     );
